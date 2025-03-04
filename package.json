@@ -1,0 +1,27 @@
+{
+    "name": "japanese-conjugation-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.ts",
+    "scripts": {
+        "test": "npm run test",
+        "t": "node dist/server.js",
+        "start-local": "npm run build && npm run serve",
+        "start": "node dist/server.js",
+        "serve": "node -r dotenv/config dist/server.js",
+        "build": "./node_modules/typescript/bin/tsc && rm -rf dist/schemas && cp -R src/schemas dist/schemas",
+        "refresh-data": "python scripts/parseInput.py"
+    },
+    "author": "jess bacheldor",
+    "license": "ISC",
+    "dependencies": {
+        "autobind-decorator": "^2.4.0",
+        "body-parser": "^1.20.3",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "typescript": "^5.7.3"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.1"
+    }
+}
