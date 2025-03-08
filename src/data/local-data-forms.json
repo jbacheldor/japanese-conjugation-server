@@ -1,0 +1,15 @@
+[{ "form_type": "form type", "chapter": "chapter", "type": "type" },
+    { "form_type": "present_affirmative_polite", "chapter": "3", "type": "verb" },
+    { "form_type": "present_negative_polite", "chapter": "3", "type": "verb" },
+    { "form_type": "past_affirmative_polite", "chapter": "4", "type": "verb" },
+    { "form_type": "past_negative_polite", "chapter": "4", "type": "verb" },
+    { "form_type": "te", "chapter": "n/a", "type": "" },
+    { "form_type": "volitional_positive_polite", "chapter": "n/a", "type": "" },
+    { "form_type": "volitional_negative_polite", "chapter": "n/a", "type": "" },
+    { "form_type": "imperative_positive_polite", "chapter": "n/a", "type": "" },
+    { "form_type": "imperative_negative_polite", "chapter": "n/a", "type": "" },
+    { "form_type": "present_affirmative_polite", "chapter": "5", "type": "adjective" },
+    { "form_type": "present_negative_polite", "chapter": "5", "type": "adjective" },
+    { "form_type": "past_affirmative_polite", "chapter": "5", "type": "adjective" },
+    { "form_type": "past_negative_polite", "chapter": "5", "type": "adjective" }
+]
