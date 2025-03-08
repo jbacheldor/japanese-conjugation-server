@@ -48,12 +48,12 @@ export default class ConjugationController implements Controller {
                 }
             })
 
-            console.log(goldenObject)
             const keys = Object.keys(goldenObject)
 
             potentialvalues.forEach((word)=> {
                 let goldengoose = {}
                 keys.forEach((value)=> {
+
                     goldengoose = {
                         ...goldengoose,
                         [value]: word[value]
@@ -61,7 +61,7 @@ export default class ConjugationController implements Controller {
                 })
                 goldenList.push(goldengoose)
             })
-            
+
             res.send(goldenList)
             next();
         } catch (err: any) {
