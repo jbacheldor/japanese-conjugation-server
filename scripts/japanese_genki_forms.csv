@@ -1,0 +1,14 @@
+form type,chapter,type
+present_affirmative_polite,3,verb
+present_negative_polite,3,verb
+past_affirmative_polite,4,verb
+past_negative_polite,4,verb
+te,n/a,
+volitional_positive_polite,n/a,
+volitional_negative_polite,n/a,
+imperative_positive_polite,n/a,
+imperative_negative_polite,n/a,
+present_affirmative_polite,5,adjective
+present_negative_polite,5,adjective
+past_affirmative_polite,5,adjective
+past_negative_polite,5,adjective
