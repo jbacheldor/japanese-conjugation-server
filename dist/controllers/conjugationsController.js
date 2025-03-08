@@ -50,22 +50,17 @@ class ConjugationController {
                     [form.form_type]: ''
                 };
             });
-            console.log('?????', goldenObject);
             const keys = Object.keys(goldenObject);
             potentialvalues.forEach((word) => {
                 let goldengoose = {};
                 keys.forEach((value) => {
-                    console.log('in keys', value);
-                    console.log('checking value', word[value]);
                     goldengoose = {
                         ...goldengoose,
                         [value]: word[value]
                     };
                 });
-                console.log('whta the frick are we in here????');
                 goldenList.push(goldengoose);
             });
-            console.log('goldenlist', goldenList);
             res.send(goldenList);
             next();
         }
