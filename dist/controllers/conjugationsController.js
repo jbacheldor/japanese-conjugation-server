@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", { value: true });
 const autobind_decorator_1 = __importDefault(require("autobind-decorator"));
 const express_1 = __importDefault(require("express"));
@@ -26,10 +26,8 @@ class ConjugationController {
         return this._router;
     }
     initializeRoutes() {
-        this._router.get("/titles", this.getTitle);
-        this._router.get("/getconjugations", this.getConjugations);
-        this._router.post("/results", this.getResults);
         this._router.get("/genkiChapters", this.getGenkiChapters);
+        this._router.post("/getGenkiResults", this.getGenkiResults);
     }
     async getGenkiChapters(req, res, next) {
         try {
@@ -69,46 +67,28 @@ class ConjugationController {
             return next(err);
         }
     }
-    async getTitle(req, res, next) {
-        let lowerTitle = req.query.language.toLowerCase();
-        const times = {
-            "japanese": {
-                title: 'なんじですか'
-            },
-            "korean": {
-                title: '몇 시예요?'
-            },
-            "urdu": {
-                title: 'وقت کیا ہوا ہے؟'
-            }
-        };
-        if (lowerTitle in times) {
-            res.send(times[lowerTitle]);
-        }
-        else {
-            res.send({
-                title: 'error !'
-            });
-        }
-        next();
-    }
-    async getConjugations(req, res, next) {
-        try {
-            if (req.query.language == "japanese") {
-                // res.send(JapaneseRules)
-            }
-            next();
-        }
-        catch (err) {
-            console.log(err);
-            return next(err);
-        }
-    }
     //  this should calculate the amount of correct results and return it!!
-    async getResults(req, res, next) {
+    async getGenkiResults(req, res, next) {
         try {
-            const results = "insert function of sorts here";
-            res.send(results);
+            console.log('request body', req.body);
+            let correct = 0;
+            req.body.guesses.forEach((guess) => {
+                let found = local_data_json_1.default.find((record) => record["word"] == guess.word);
+                // need to check the form value and the 
+                if (found) {
+                    console.log('guess.answer', guess.answer);
+                    console.log('guess form', guess.form);
+                    console.log('found[guess.form]', found[guess.form]);
+                    if (guess.answer == found[guess.form]) {
+                        console.log('are we in here??');
+                        correct += 1;
+                    }
+                }
+            });
+            let returnValue = {
+                "overallScore": correct / req.body.guesses.length
+            };
+            res.send(returnValue);
             next();
         }
         catch (err) {
@@ -129,16 +109,4 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_d = typeof express_1.default !== "undefined" && express_1.default.Request) === "function" ? _d : Object, typeof (_e = typeof express_1.default !== "undefined" && express_1.default.Response) === "function" ? _e : Object, typeof (_f = typeof express_1.default !== "undefined" && express_1.default.NextFunction) === "function" ? _f : Object]),
     __metadata("design:returntype", Promise)
-], ConjugationController.prototype, "getTitle", null);
-__decorate([
-    autobind_decorator_1.default,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_g = typeof express_1.default !== "undefined" && express_1.default.Request) === "function" ? _g : Object, typeof (_h = typeof express_1.default !== "undefined" && express_1.default.Response) === "function" ? _h : Object, typeof (_j = typeof express_1.default !== "undefined" && express_1.default.NextFunction) === "function" ? _j : Object]),
-    __metadata("design:returntype", Promise)
-], ConjugationController.prototype, "getConjugations", null);
-__decorate([
-    autobind_decorator_1.default,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_k = typeof express_1.default !== "undefined" && express_1.default.Request) === "function" ? _k : Object, typeof (_l = typeof express_1.default !== "undefined" && express_1.default.Response) === "function" ? _l : Object, typeof (_m = typeof express_1.default !== "undefined" && express_1.default.NextFunction) === "function" ? _m : Object]),
-    __metadata("design:returntype", Promise)
-], ConjugationController.prototype, "getResults", null);
+], ConjugationController.prototype, "getGenkiResults", null);
