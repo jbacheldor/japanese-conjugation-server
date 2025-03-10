@@ -16,10 +16,8 @@ export default class ConjugationController implements Controller {
     }
 
     initializeRoutes() {
-        this._router.get("/titles", this.getTitle);
-        this._router.get("/getconjugations", this.getConjugations);
-        this._router.post("/results", this.getResults);
         this._router.get("/genkiChapters", this.getGenkiChapters);
+        this._router.post("/getGenkiResults", this.getGenkiResults);
     }
 
     @autobind
@@ -39,7 +37,8 @@ export default class ConjugationController implements Controller {
             // constructs the object we can send back!
             let goldenObject = {
                 word: '',
-                dictionary_form_hiragana: ''
+                dictionary_form_hiragana: '',
+                type: ''
             }
             forms.forEach((form)=> {
                 goldenObject = {
@@ -70,64 +69,145 @@ export default class ConjugationController implements Controller {
         }
     }
 
-    @autobind
-    async getTitle(
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction,
-    ) {
-        let lowerTitle = req.query.language.toLowerCase()
-
-        const times = {
-            "japanese": {
-                title: 'なんじですか'
-            },
-            "korean": {
-                title: '몇 시예요?'
-            },
-            "urdu": {
-                title: 'وقت کیا ہوا ہے؟'
-            }
-        }
-    
-        if (lowerTitle in times) {
-            res.send(times[lowerTitle])
-        } else {
-            res.send({
-                title: 'error !'
-            })
-        }
-        next();
-    }
-
-
-    @autobind
-    async getConjugations(
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction,
-    ) {
-        try {
-            if (req.query.language == "japanese") {
-                // res.send(JapaneseRules)
-            }
-            next();
-        } catch (err: any) {
-            console.log(err);
-            return next(err);
-        }
-    }
-
     //  this should calculate the amount of correct results and return it!!
     @autobind
-    async getResults(
+    async getGenkiResults(
         req: express.Request,
         res: express.Response,
         next: express.NextFunction,
     ) {
         try {
-            const results = "insert function of sorts here"
-            res.send(results)
+            let forms = {}
+            let type = {}
+            let genkiChapters = {}
+            // for each form - identify what chapter it's introduced in by 
+            // looking at form data
+            // and then calculating that amount
+
+            let correct = 0;
+            req.body.guesses.forEach((guess)=> {
+                let found = jsondata.find((record)=> record["word"] == guess.word)
+                
+                // need to check the form value and the 
+                if(found){
+                    // add to overall correct form
+                    if(guess.answer ==  found[guess.form]){
+                        correct += 1
+                    
+                        // if the form already exists in the dictionary just add to the overall count
+                        if(Object.keys(forms).includes(guess.form)){
+                            forms[guess.form] = {
+                                correct: forms[guess.form].correct += 1,
+                                total: forms[guess.form].total += 1
+                            }
+                        }
+                        else {
+                            forms[guess.form] = {
+                                correct: 1,
+                                total: 1
+                            }
+                        }
+
+                        // updates the type 
+                        if(Object.keys(type).includes(guess.type)){
+                            type[guess.type] = {
+                                correct: type[guess.type].correct += 1,
+                                total: type[guess.type].total += 1
+                            }
+                        }
+                        else {
+                            type[guess.type] = {
+                                correct: 1,
+                                total: 1
+                            }
+                        }
+                        
+                        let chapter = formdata.find((form) => (guess.form == form.form_type) && (guess.type == form.type))?.chapter
+                        if(chapter){
+                            if(Object.keys(genkiChapters).includes(chapter)){
+                                genkiChapters[chapter] = {
+                                    correct: genkiChapters[chapter].correct += 1,
+                                    total: genkiChapters[chapter].total += 1
+                                }
+                            }
+                            else {
+                                genkiChapters[chapter] = {
+                                    correct: 1,
+                                    total: 1
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        // if the form already exists in the dictionary just add to the overall count
+                        if(Object.keys(forms).includes(guess.form)){
+                            forms[guess.form] = {
+                                ...forms[guess.form],
+                                total: forms[guess.form].total += 1
+                            }
+                        }
+                        else {
+                            forms[guess.form] = {
+                                correct: 0,
+                                total: 1
+                            }
+                        }
+
+                        // updates the type results
+                        if(Object.keys(type).includes(guess.type)){
+                            type[guess.type] = {
+                                ...type[guess.type],
+                                total: type[guess.type].total += 1
+                            }
+                        }
+                        else {
+                            type[guess.type] = {
+                                correct: 0,
+                                total: 1
+                            }
+                        }
+
+                        let chapter = formdata.find((form) => (guess.form == form.form_type) && (guess.type == form.type))?.chapter
+                        if(chapter) {
+                            if(Object.keys(genkiChapters).includes(chapter)){
+                                genkiChapters[chapter] = {
+                                    ...genkiChapters[chapter],
+                                    total: genkiChapters[chapter].total += 1
+                                }
+                            }
+                            else {
+                                genkiChapters[chapter] = {
+                                    correct: 0,
+                                    total: 1
+                                }
+                            }
+                        }
+                    }
+            }
+            })
+
+            // goes through and updates percentage
+            Object.keys(forms).forEach((key)=> {
+                forms[key]= forms[key].correct / forms[key].total
+
+            })
+            Object.keys(type).forEach((key)=> {
+                type[key]= type[key].correct / type[key].total
+            })
+
+            Object.keys(genkiChapters).forEach((key)=> {
+                genkiChapters[key]= genkiChapters[key].correct / genkiChapters[key].total
+            })
+
+
+
+            let returnValue = {
+                "overallScore": correct / req.body.guesses.length,
+                "forms": forms,
+                "chapters": genkiChapters,
+                "type": type
+            }
+            res.send(returnValue)
             next();
         } catch (err: any) {
             console.log(err);
