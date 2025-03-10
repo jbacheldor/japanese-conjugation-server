@@ -37,7 +37,8 @@ export default class ConjugationController implements Controller {
             // constructs the object we can send back!
             let goldenObject = {
                 word: '',
-                dictionary_form_hiragana: ''
+                dictionary_form_hiragana: '',
+                type: ''
             }
             forms.forEach((form)=> {
                 goldenObject = {
@@ -77,6 +78,8 @@ export default class ConjugationController implements Controller {
     ) {
         try {
             let forms = {}
+            let genkiChapters = {}
+            let type = {}
 
             let correct = 0;
             req.body.guesses.forEach((guess)=> {
@@ -101,6 +104,19 @@ export default class ConjugationController implements Controller {
                                 total: 1
                             }
                         }
+                        if(Object.keys(type).includes(guess.type)){
+                            type[guess.type] = {
+                                correct: type[guess.type].correct += 1,
+                                total: type[guess.type].total += 1
+                            }
+                        }
+                        else {
+                            type[guess.type] = {
+                                correct: 1,
+                                total: 1
+                            }
+                        }
+
                     }
                     else {
                         // if the form already exists in the dictionary just add to the overall count
@@ -116,12 +132,36 @@ export default class ConjugationController implements Controller {
                                 total: 1
                             }
                         }
+
+                        if(Object.keys(type).includes(guess.type)){
+                            type[guess.type] = {
+                                ...type[guess.type],
+                                total: type[guess.type].total += 1
+                            }
+                        }
+                        else {
+                            type[guess.type] = {
+                                correct: 0,
+                                total: 1
+                            }
+                        }
                     }
             }
             })
+
+            // goes through and updates percentage
+            Object.keys(forms).forEach((key)=> {
+                forms[key]= forms[key].correct / forms[key].total
+            })
+            Object.keys(type).forEach((key)=> {
+                type[key]= type[key].correct / type[key].total
+            })
+
             let returnValue = {
                 "overallScore": correct / req.body.guesses.length,
                 "forms": forms,
+                "chapters": genkiChapters,
+                "type": type
             }
             res.send(returnValue)
             next();

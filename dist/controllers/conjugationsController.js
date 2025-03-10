@@ -40,7 +40,8 @@ class ConjugationController {
             // constructs the object we can send back!
             let goldenObject = {
                 word: '',
-                dictionary_form_hiragana: ''
+                dictionary_form_hiragana: '',
+                type: ''
             };
             forms.forEach((form) => {
                 goldenObject = {
@@ -70,8 +71,9 @@ class ConjugationController {
     //  this should calculate the amount of correct results and return it!!
     async getGenkiResults(req, res, next) {
         try {
-            console.log('request body', req.body);
             let forms = {};
+            let genkiChapters = {};
+            let type = {};
             let correct = 0;
             req.body.guesses.forEach((guess) => {
                 let found = local_data_json_1.default.find((record) => record["word"] == guess.word);
@@ -82,15 +84,25 @@ class ConjugationController {
                         correct += 1;
                         // if the form already exists in the dictionary just add to the overall count
                         if (Object.keys(forms).includes(guess.form)) {
-                            console.log('forms currently', forms);
                             forms[guess.form] = {
                                 correct: forms[guess.form].correct += 1,
                                 total: forms[guess.form].total += 1
                             };
-                            console.log('forms after', forms);
                         }
                         else {
                             forms[guess.form] = {
+                                correct: 1,
+                                total: 1
+                            };
+                        }
+                        if (Object.keys(type).includes(guess.type)) {
+                            type[guess.type] = {
+                                correct: type[guess.type].correct += 1,
+                                total: type[guess.type].total += 1
+                            };
+                        }
+                        else {
+                            type[guess.type] = {
                                 correct: 1,
                                 total: 1
                             };
@@ -99,12 +111,10 @@ class ConjugationController {
                     else {
                         // if the form already exists in the dictionary just add to the overall count
                         if (Object.keys(forms).includes(guess.form)) {
-                            console.log('forms currently', forms);
                             forms[guess.form] = {
                                 ...forms[guess.form],
                                 total: forms[guess.form].total += 1
                             };
-                            console.log('forms after??', forms);
                         }
                         else {
                             forms[guess.form] = {
@@ -112,12 +122,33 @@ class ConjugationController {
                                 total: 1
                             };
                         }
+                        if (Object.keys(type).includes(guess.type)) {
+                            type[guess.type] = {
+                                ...type[guess.type],
+                                total: type[guess.type].total += 1
+                            };
+                        }
+                        else {
+                            type[guess.type] = {
+                                correct: 0,
+                                total: 1
+                            };
+                        }
                     }
                 }
+            });
+            // goes through and updates percentage
+            Object.keys(forms).forEach((key) => {
+                forms[key] = forms[key].correct / forms[key].total;
+            });
+            Object.keys(type).forEach((key) => {
+                type[key] = type[key].correct / type[key].total;
             });
             let returnValue = {
                 "overallScore": correct / req.body.guesses.length,
                 "forms": forms,
+                "chapters": genkiChapters,
+                "type": type
             };
             res.send(returnValue);
             next();
