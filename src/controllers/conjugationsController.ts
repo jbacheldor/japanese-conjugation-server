@@ -78,8 +78,11 @@ export default class ConjugationController implements Controller {
     ) {
         try {
             let forms = {}
-            let genkiChapters = {}
             let type = {}
+            let genkiChapters = {}
+            // for each form - identify what chapter it's introduced in by 
+            // looking at form data
+            // and then calculating that amount
 
             let correct = 0;
             req.body.guesses.forEach((guess)=> {
@@ -104,6 +107,8 @@ export default class ConjugationController implements Controller {
                                 total: 1
                             }
                         }
+
+                        // updates the type 
                         if(Object.keys(type).includes(guess.type)){
                             type[guess.type] = {
                                 correct: type[guess.type].correct += 1,
@@ -116,7 +121,22 @@ export default class ConjugationController implements Controller {
                                 total: 1
                             }
                         }
-
+                        
+                        let chapter = formdata.find((form) => (guess.form == form.form_type) && (guess.type == form.type))?.chapter
+                        if(chapter){
+                            if(Object.keys(genkiChapters).includes(chapter)){
+                                genkiChapters[chapter] = {
+                                    correct: genkiChapters[chapter].correct += 1,
+                                    total: genkiChapters[chapter].total += 1
+                                }
+                            }
+                            else {
+                                genkiChapters[chapter] = {
+                                    correct: 1,
+                                    total: 1
+                                }
+                            }
+                        }
                     }
                     else {
                         // if the form already exists in the dictionary just add to the overall count
@@ -133,6 +153,7 @@ export default class ConjugationController implements Controller {
                             }
                         }
 
+                        // updates the type results
                         if(Object.keys(type).includes(guess.type)){
                             type[guess.type] = {
                                 ...type[guess.type],
@@ -145,6 +166,22 @@ export default class ConjugationController implements Controller {
                                 total: 1
                             }
                         }
+
+                        let chapter = formdata.find((form) => (guess.form == form.form_type) && (guess.type == form.type))?.chapter
+                        if(chapter) {
+                            if(Object.keys(genkiChapters).includes(chapter)){
+                                genkiChapters[chapter] = {
+                                    ...genkiChapters[chapter],
+                                    total: genkiChapters[chapter].total += 1
+                                }
+                            }
+                            else {
+                                genkiChapters[chapter] = {
+                                    correct: 0,
+                                    total: 1
+                                }
+                            }
+                        }
                     }
             }
             })
@@ -152,10 +189,17 @@ export default class ConjugationController implements Controller {
             // goes through and updates percentage
             Object.keys(forms).forEach((key)=> {
                 forms[key]= forms[key].correct / forms[key].total
+
             })
             Object.keys(type).forEach((key)=> {
                 type[key]= type[key].correct / type[key].total
             })
+
+            Object.keys(genkiChapters).forEach((key)=> {
+                genkiChapters[key]= genkiChapters[key].correct / genkiChapters[key].total
+            })
+
+
 
             let returnValue = {
                 "overallScore": correct / req.body.guesses.length,

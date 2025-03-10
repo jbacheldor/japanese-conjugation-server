@@ -7,6 +7,7 @@ to-do list:
 - need to in genki call:
     - add in inclusive flag - boolean
     - figure out how to differentiate between verbs and adjectives
+    - right now we have results working but it would be great to have a separate section for adjectives / verbs rather than as one bulk unit
 
 - add in more data to csv 
 - export functions into separate file, it's a weebit busy right now
