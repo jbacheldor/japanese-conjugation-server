@@ -71,22 +71,53 @@ class ConjugationController {
     async getGenkiResults(req, res, next) {
         try {
             console.log('request body', req.body);
+            let forms = {};
             let correct = 0;
             req.body.guesses.forEach((guess) => {
                 let found = local_data_json_1.default.find((record) => record["word"] == guess.word);
                 // need to check the form value and the 
                 if (found) {
-                    console.log('guess.answer', guess.answer);
-                    console.log('guess form', guess.form);
-                    console.log('found[guess.form]', found[guess.form]);
+                    // add to overall correct form
                     if (guess.answer == found[guess.form]) {
-                        console.log('are we in here??');
                         correct += 1;
+                        // if the form already exists in the dictionary just add to the overall count
+                        if (Object.keys(forms).includes(guess.form)) {
+                            console.log('forms currently', forms);
+                            forms[guess.form] = {
+                                correct: forms[guess.form].correct += 1,
+                                total: forms[guess.form].total += 1
+                            };
+                            console.log('forms after', forms);
+                        }
+                        else {
+                            forms[guess.form] = {
+                                correct: 1,
+                                total: 1
+                            };
+                        }
+                    }
+                    else {
+                        // if the form already exists in the dictionary just add to the overall count
+                        if (Object.keys(forms).includes(guess.form)) {
+                            console.log('forms currently', forms);
+                            forms[guess.form] = {
+                                ...forms[guess.form],
+                                total: forms[guess.form].total += 1
+                            };
+                            console.log('forms after??', forms);
+                        }
+                        else {
+                            forms[guess.form] = {
+                                correct: 0,
+                                total: 1
+                            };
+                        }
                     }
                 }
             });
             let returnValue = {
-                "overallScore": correct / req.body.guesses.length
+                "overallScore": correct / req.body.guesses.length,
+                "forms": forms,
             };
             res.send(returnValue);
             next();
