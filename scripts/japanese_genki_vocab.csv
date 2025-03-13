@@ -1,23 +1,24 @@
-to go,u,ni/he,verb,行く,,3,行きます,行きません,行きました,行きませんでした
-to go back; to return,u,ni/he,verb,帰る,,3,帰ります,帰りません,帰りました,帰りませんでした
-to listen; to hear,u,wo,verb,聞く,,3,聞きます,聞きません,聞きました,聞きませんでした
-to drink,u,wo,verb,飲む,,3,飲みます,飲みません,飲みました,飲みませんでした
-to speak; to talk,u,wo/de,verb,話す,,3,話します,話しません,話しました,話しませんでした
-to read,u,wo,verb,読む,,3,読みます,読みません,読みました,読みませんでした
-to get up,ru,,verb,起きる,,3,起きます,起きません,起きました,起きませんでした
-to eat,ru,wo,verb,食べる,,3,食べます,食べません,食べました,食べませんでした
-to sleep; to go to sleep,ru,,verb,寝る,,3,寝ます,寝ません,寝ました,寝ませんでした
-to see; to look at; to watch,ru,wo,verb,見る,,3,見ます,見ません,見ました,見ませんでした
-to come,irregular,ni/he,verb,来る,,3,来ます,来ません,来ました,来ませんでした
-to do,irregular,wo,verb,する,,3,します,しません,しました,しませんでした
-to study,irregular,wo,verb,勉強する,,3,勉強します,勉強しません,勉強しました,勉強しませんでした
-good,,,adjective,いい,,3,,,,
-early,,,adjective,早い,,3,,,,
-to meet; to see (a person),u,ni,verb, 会う,,4, 会います, 会いません, 会いました, 会いませんでした
-there is...,u,ga/ni,verb,ある,,4,あります,ありません,ありました,ありませんでした
-to buy,u,wo,verb,買う,,4,買います,買いません,買いました,買いませんでした
-to write,u,ni/wo,verb,書く,,4,書きます,書きません,書きました,書きませんでした
-to take (a picture),u,ni/wo,verb,撮る,,4,撮ります,撮りません,撮りました,撮りませんでした
-to wait,u,wo,verb,待つ,,4,待ちます,待ちません,待ちました,待ちませんでした
-to understand,u,ga,verb,わかる,,4,わかります,わかりません,わかりました,わかりませんでした
-(a person) is in... stays at,ru,ga/ni,verb,いる,,4,います,いません,いました,いませんでした
+word,pos,particle,type,dictionary_form_kanji,dictionary_form_hiragana,stem_hiragana,chapter,present_affirmative_polite,present_negative_polite,past_affirmative_polite,past_negative_polite
+to go,u,ni/he,verb,行く,いく,い,3,行きます,行きません,行きました,行きませんでした
+to go back; to return,u,ni/he,verb,帰る,かえる,かえ,3,帰ります,帰りません,帰りました,帰りませんでした
+to listen; to hear,u,wo,verb,聞く,きく,き,3,聞きます,聞きません,聞きました,聞きませんでした
+to drink,u,wo,verb,飲む,のむ,の,3,飲みます,飲みません,飲みました,飲みませんでした
+to speak; to talk,u,wo/de,verb,話す,はなす,はな,3,話します,話しません,話しました,話しませんでした
+to read,u,wo,verb,読む,よむ,よ,3,読みます,読みません,読みました,読みませんでした
+to get up,ru,,verb,起きる,おきる,お,3,起きます,起きません,起きました,起きませんでした
+to eat,ru,wo,verb,食べる,たべる,た,3,食べます,食べません,食べました,食べませんでした
+to sleep; to go to sleep,ru,,verb,寝る,ねる,ね,3,寝ます,寝ません,寝ました,寝ませんでした
+to see; to look at; to watch,ru,wo,verb,見る,みる,み,3,見ます,見ません,見ました,見ませんでした
+to come,irregular,ni/he,verb,来る,くる,く,3,来ます,来ません,来ました,来ませんでした
+to do,irregular,wo,verb,する,する,す,3,します,しません,しました,しませんでした
+to study,irregular,wo,verb,勉強する,べんきょうする,べんきょう,3,勉強します,勉強しません,勉強しました,勉強しませんでした
+good,,,adjective,いい,いい,,3,,,,
+early,,,adjective,早い,はやい,はや,3,,,,
+to meet; to see (a person),u,ni,verb, 会う,あう,あ,4, 会います, 会いません, 会いました, 会いませんでした
+there is...,u,ga/ni,verb,ある,ある,,4,あります,ありません,ありました,ありませんでした
+to buy,u,wo,verb,買う,かう,か,4,買います,買いません,買いました,買いませんでした
+to write,u,ni/wo,verb,書く,かく,か,4,書きます,書きません,書きました,書きませんでした
+to take (a picture),u,ni/wo,verb,撮る,とる,と,4,撮ります,撮りません,撮りました,撮りませんでした
+to wait,u,wo,verb,待つ,まつ,ま,4,待ちます,待ちません,待ちました,待ちませんでした
+to understand,u,ga,verb,わかる,わかる,,4,わかります,わかりません,わかりました,わかりませんでした
+(a person) is in... stays at,ru,ga/ni,verb,いる,いる,,4,います,いません,いました,いませんでした
