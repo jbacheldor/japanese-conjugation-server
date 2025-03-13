@@ -34,33 +34,33 @@ export default class ConjugationController implements Controller {
             var potentialvalues = jsondata.filter((row) => req.query.chapters.includes(row["chapter"]))
             var forms = formdata.filter((form)=> req.query.chapters.includes(form["chapter"]))
 
-            // constructs the object we can send back!
-            let goldenObject = {
-                word: '',
-                dictionary_form_hiragana: '',
-                type: ''
-            }
+            let goldenGooseList = []
+
             forms.forEach((form)=> {
-                goldenObject = {
-                    ...goldenObject,
-                    [form.form_type]: ''
-                }
-            })
-
-            const keys = Object.keys(goldenObject)
-
-            potentialvalues.forEach((word)=> {
-                let goldengoose = {}
-                keys.forEach((value)=> {
-
-                    goldengoose = {
-                        ...goldengoose,
-                        [value]: word[value]
+                goldenGooseList.push(
+                    {
+                        word: '',
+                        stem_hiragana: '',
+                        type: '',
+                        [form.form_type]: ''
                     }
+                )
+            })
+            potentialvalues.forEach((word)=> {
+                goldenGooseList.forEach((wordForm)=> {
+                    let keys = Object.keys(wordForm)
+                    keys.forEach((value) => {
+                        wordForm = {
+                            ...wordForm,
+                            [value]: word[value]
+                        }
+                    })
+                    goldenList.push(wordForm)
                 })
-                goldenList.push(goldengoose)
             })
 
+     
+            res.header('Access-Control-Allow-Origin', '*');
             res.send(goldenList)
             next();
         } catch (err: any) {
@@ -207,6 +207,7 @@ export default class ConjugationController implements Controller {
                 "chapters": genkiChapters,
                 "type": type
             }
+            res.header('Access-Control-Allow-Origin', '*');
             res.send(returnValue)
             next();
         } catch (err: any) {

@@ -37,29 +37,32 @@ class ConjugationController {
             let goldenList = [];
             var potentialvalues = local_data_json_1.default.filter((row) => req.query.chapters.includes(row["chapter"]));
             var forms = local_data_forms_json_1.default.filter((form) => req.query.chapters.includes(form["chapter"]));
-            // constructs the object we can send back!
-            let goldenObject = {
-                word: '',
-                dictionary_form_hiragana: '',
-                type: ''
-            };
+            let goldenGooseList = [];
             forms.forEach((form) => {
-                goldenObject = {
-                    ...goldenObject,
+                goldenGooseList.push({
+                    word: '',
+                    stem_hiragana: '',
+                    type: '',
                     [form.form_type]: ''
-                };
-            });
-            const keys = Object.keys(goldenObject);
-            potentialvalues.forEach((word) => {
-                let goldengoose = {};
-                keys.forEach((value) => {
-                    goldengoose = {
-                        ...goldengoose,
-                        [value]: word[value]
-                    };
                 });
-                goldenList.push(goldengoose);
             });
+            potentialvalues.forEach((word) => {
+                console.log('word', word);
+                goldenGooseList.forEach((wordForm) => {
+                    let keys = Object.keys(wordForm);
+                    console.log('lets see the keys', keys);
+                    keys.forEach((value) => {
+                        console.log('value', value);
+                        console.log('word at value', word[value]);
+                        wordForm = {
+                            ...wordForm,
+                            [value]: word[value]
+                        };
+                    });
+                    goldenList.push(wordForm);
+                });
+            });
+            res.header('Access-Control-Allow-Origin', '*');
             res.send(goldenList);
             next();
         }
@@ -188,6 +191,7 @@ class ConjugationController {
                 "chapters": genkiChapters,
                 "type": type
             };
+            res.header('Access-Control-Allow-Origin', '*');
             res.send(returnValue);
             next();
         }
