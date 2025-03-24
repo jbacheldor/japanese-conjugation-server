@@ -41,8 +41,9 @@ export default class ConjugationController implements Controller {
                     {
                         word: '',
                         stem_hiragana: '',
+                        dictionary_form_kanji: '',
                         type: '',
-                        [form.form_type]: ''
+                        [form.form_type]: '',
                     }
                 )
             })
@@ -50,18 +51,38 @@ export default class ConjugationController implements Controller {
                 goldenGooseList.forEach((wordForm)=> {
                     let keys = Object.keys(wordForm)
                     keys.forEach((value) => {
-                        wordForm = {
-                            ...wordForm,
-                            [value]: word[value]
+                        if(value != "word" && value != "stem_hiragana" && value != 'dictionary_form_kanji' && value != "type") {
+                            wordForm = {
+                                ...wordForm,
+                                form:  value,
+                                [value]: word[value]
+                            }
+                        }
+                        else {
+                            wordForm = {
+                                ...wordForm,
+                                [value]: word[value]
+                            }
                         }
                     })
                     goldenList.push(wordForm)
                 })
             })
+            
+            let goldenSet = new Set()
+
+            let theSecondGoldenList = []
+
+            while(goldenSet.size < 10){
+                const rand = Math.floor(Math.random() * goldenList.length)
+                if(goldenSet.has(rand)) continue
+                goldenSet.add(rand)
+                theSecondGoldenList.push(goldenList[rand])
+            }
 
      
             res.header('Access-Control-Allow-Origin', '*');
-            res.send(goldenList)
+            res.send(theSecondGoldenList)
             next();
         } catch (err: any) {
             console.log(err);
